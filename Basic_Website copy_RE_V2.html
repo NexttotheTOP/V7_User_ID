@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Botpress and Calendly Test</title>
+    <style>
+        body {
+            background-color: grey;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Welcome to Our Real Estate Site babyyy</h1>
+    </header>
+
+    <main>
+        <section>
+            <h2>About Us</h2>
+            <p>Information about our office...</p>
+        </section>
+
+        <section>
+            <h2>Contact Us</h2>
+            <p>Reach out to us via the following link:</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 amigo </p>
+    </footer>
+<!-- Calendly badge widget begin -->
+<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+<!-- Calendly badge widget end -->
+
+
+
+<script src="https://cdn.botpress.cloud/webchat/v1/inject.js"></script>
+<script>
+
+    // Initialize Botpress Web Chat
+    window.botpressWebChat.init({
+      "composerPlaceholder": "Happy to help",
+      "botConversationDescription": "This chatbot was built surprisingly fast with Botpress",
+      "botId": "1ed1b87e-1940-423c-baa5-b5e77a0335a8",
+      "hostUrl": "https://cdn.botpress.cloud/webchat/v1",
+      "messagingUrl": "https://messaging.botpress.cloud",
+      "clientId": "1ed1b87e-1940-423c-baa5-b5e77a0335a8",
+      "webhookId": "ca273c1f-f075-4af5-93b1-94fab1384ace",
+      "lazySocket": true,
+      "themeName": "prism",
+      "botName": "RE_tester_babbyy",
+      "frontendVersion": "v1",
+      "useSessionStorage": true,
+      "theme": "prism",
+      "themeColor": "#2563eb"
+  });
+
+
+  function getCookie(name) {
+    let cookieArray = document.cookie.split(';');
+    for(let i = 0; i < cookieArray.length; i++) {
+        let cookiePair = cookieArray[i].split('=');
+        if(name == cookiePair[0].trim()) {
+            return decodeURIComponent(cookiePair[1]);
+        }
+    }
+    return null;
+}
+
+    
+function sendTriggerPayload() {
+    let existingUid;
+
+    try {
+        // Attempt to retrieve the existing user ID from cookies
+        existingUid = getCookie('intercom-device-id-jahj5zhb');
+
+        // If an existing user ID is found, attempt to send payload with it
+        if (existingUid) {
+            console.log("Preparing to send payload for existing user...");
+            console.log({existingUid});
+
+            window.botpressWebChat.sendPayload({
+                type: 'trigger',
+                payload: { action: 'test', userId: existingUid }
+            });
+
+            console.log("Payload sent for existing user.");
+            return; // Exit the function if payload is sent successfully
+        }
+    } catch (error) {
+        console.error("Error encountered:", error);
+        // If there's an error, you can handle it here if needed
+    }
+
+    // If no existing user ID is found or if there was an error, send payload for new user
+    console.log("Preparing to send payload for new user...");
+
+    window.botpressWebChat.sendPayload({
+        type: 'trigger',
+        payload: { action: 'yellah' }
+    });
+
+    console.log("Payload sent for new user.");
+}
+
+window.botpressWebChat.onEvent(event => {
+    console.log('Event received:', event);
+    if (event.type === 'TRIGGER' && event.value && event.value.action === 'Userd') {
+        console.log('UserId trigger event received:', event);
+        // You can handle the event here if needed
+        sendTriggerPayload();
+    }
+}, ['TRIGGER']); // Listen only for 'TRIGGER' events
+
+
+
+        // Listen for the custom event to show the Calendly widget
+        window.botpressWebChat.onEvent(event => {
+    if (event.type === 'TRIGGER') {
+        if (event.value && event.value.action === 'showCalendly') {
+            // This will trigger the Calendly popup for the 'praktijk123' link
+            Calendly.showPopupWidget('https://calendly.com/woutvanparys');
+        }
+    }
+}, ['TRIGGER']);
+</script>
+
+</body>
+
+</html>
+
